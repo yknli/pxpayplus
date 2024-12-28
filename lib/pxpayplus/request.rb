@@ -9,6 +9,10 @@ module Pxpayplus
       end
     end
 
+    def signature_fields
+      [ :auth_binding_no, :req_time ]
+    end
+
     def signature
       @signature ||= Pxpayplus.sign(params.values.join)
     end
