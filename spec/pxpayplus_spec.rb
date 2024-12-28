@@ -28,4 +28,20 @@ RSpec.describe Pxpayplus do
       expect { Pxpayplus.configure{ |config| config.secret_key = 'key' } }.to raise_error(RuntimeError, 'merchant_code not set.')
     end
   end
+
+  describe 'sign' do
+    before do
+      Pxpayplus.configure do |config|
+        config.secret_key = 'test_secret_key'
+        config.merchant_code = 'test_merchant_code'
+      end
+    end
+
+    it 'signs request data correctly' do
+      auth_binding_no = 'auth_binding_no'
+      req_time = 'req_time'
+      signature = Pxpayplus.sign(auth_binding_no + req_time)
+      expect(signature).to eq('E458D99A038266FA090CEE7890EE48A2B6FB805F403449859CD7DA62D5415ECB')
+    end
+  end
 end
