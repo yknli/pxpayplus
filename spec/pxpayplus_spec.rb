@@ -62,6 +62,14 @@ RSpec.describe Pxpayplus do
         signature = Pxpayplus.sign(data)
         expect(Pxpayplus.verify(data, signature)).to eq(true)
       end
+
+      it 'raise an error if signature value is not a string' do
+        expect { Pxpayplus.verify(data, 123) }.to raise_error(RuntimeError, 'signature value should be a string.')
+      end
+
+      it 'raise an error if signature value is empty' do
+        expect { Pxpayplus.verify(data) }.to raise_error(RuntimeError, 'signature is empty.')
+      end
     end
   end
 end
