@@ -38,11 +38,13 @@ RSpec.describe Pxpayplus do
       end
     end
 
+    let(:auth_binding_no) { 'auth_binding_no' }
+    let(:req_time) { 'req_time' }
+    let(:data) { auth_binding_no + req_time }
+
     describe 'sign' do
       it 'signs request data correctly' do
-        auth_binding_no = 'auth_binding_no'
-        req_time = 'req_time'
-        signature = Pxpayplus.sign(auth_binding_no + req_time)
+        signature = Pxpayplus.sign(data)
         expect(signature).to eq('E458D99A038266FA090CEE7890EE48A2B6FB805F403449859CD7DA62D5415ECB')
       end
 
@@ -57,10 +59,7 @@ RSpec.describe Pxpayplus do
 
     describe 'verify' do
       it 'verifies request data correctly' do
-        auth_binding_no = 'auth_binding_no'
-        req_time = 'req_time'
-        data = auth_binding_no + req_time
-        signature = Pxpayplus.sign(auth_binding_no + req_time)
+        signature = Pxpayplus.sign(data)
         expect(Pxpayplus.verify(data, signature)).to eq(true)
       end
     end
