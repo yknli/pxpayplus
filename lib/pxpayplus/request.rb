@@ -1,7 +1,7 @@
 module Pxpayplus
   class Request
 
-    attr_accessor :params, :method, :url
+    attr_accessor :params, :method, :url, :headers
 
     def initialize(options = {})
       options.each do |key, value|
@@ -19,6 +19,14 @@ module Pxpayplus
 
     def signature
       @signature ||= Pxpayplus.sign(signature_params.values.join)
+    end
+
+    def headers
+      {
+        'Content-Type': 'application/json;charset=utf-8',
+        'PX-MerCode': Pxpayplus.merchant_code,
+        'PX-SignValue': signature
+      }
     end
   end
 end
