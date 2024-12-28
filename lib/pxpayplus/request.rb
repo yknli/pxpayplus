@@ -18,7 +18,7 @@ module Pxpayplus
     end
 
     def signature
-      @signature ||= Pxpayplus.sign(params.values.join)
+      @signature ||= Pxpayplus.sign(signature_params.values.join)
     end
   end
 end
