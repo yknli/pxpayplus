@@ -43,5 +43,13 @@ RSpec.describe Pxpayplus do
       signature = Pxpayplus.sign(auth_binding_no + req_time)
       expect(signature).to eq('E458D99A038266FA090CEE7890EE48A2B6FB805F403449859CD7DA62D5415ECB')
     end
+
+    it 'raise an error if data value is not a string' do
+      expect { Pxpayplus.sign(123) }.to raise_error(RuntimeError, 'data for signing should be a string.')
+    end
+
+    it 'raise an error if data value is empty' do
+      expect { Pxpayplus.sign }.to raise_error(RuntimeError, 'data is empty.')
+    end
   end
 end
