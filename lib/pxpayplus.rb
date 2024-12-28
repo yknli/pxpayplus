@@ -35,7 +35,7 @@ module Pxpayplus
     end
 
     def sign(data='')
-      raise 'data for signing should be a string.' unless data.is_a?(String)
+      raise 'data value should be a string.' unless data.is_a?(String)
       raise 'data is empty.' if data.empty?
 
       digest = OpenSSL::Digest.new('sha256')
