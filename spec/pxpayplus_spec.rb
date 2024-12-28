@@ -29,7 +29,8 @@ RSpec.describe Pxpayplus do
     end
   end
 
-  describe 'sign' do
+  context 'when credentials configured' do
+
     before do
       Pxpayplus.configure do |config|
         config.secret_key = 'test_secret_key'
@@ -37,36 +38,31 @@ RSpec.describe Pxpayplus do
       end
     end
 
-    it 'signs request data correctly' do
-      auth_binding_no = 'auth_binding_no'
-      req_time = 'req_time'
-      signature = Pxpayplus.sign(auth_binding_no + req_time)
-      expect(signature).to eq('E458D99A038266FA090CEE7890EE48A2B6FB805F403449859CD7DA62D5415ECB')
-    end
+    describe 'sign' do
+      it 'signs request data correctly' do
+        auth_binding_no = 'auth_binding_no'
+        req_time = 'req_time'
+        signature = Pxpayplus.sign(auth_binding_no + req_time)
+        expect(signature).to eq('E458D99A038266FA090CEE7890EE48A2B6FB805F403449859CD7DA62D5415ECB')
+      end
 
-    it 'raise an error if data value is not a string' do
-      expect { Pxpayplus.sign(123) }.to raise_error(RuntimeError, 'data for signing should be a string.')
-    end
+      it 'raise an error if data value is not a string' do
+        expect { Pxpayplus.sign(123) }.to raise_error(RuntimeError, 'data for signing should be a string.')
+      end
 
-    it 'raise an error if data value is empty' do
-      expect { Pxpayplus.sign }.to raise_error(RuntimeError, 'data is empty.')
-    end
-  end
-
-  describe 'verify' do
-    before do
-      Pxpayplus.configure do |config|
-        config.secret_key = 'test_secret_key'
-        config.merchant_code = 'test_merchant_code'
+      it 'raise an error if data value is empty' do
+        expect { Pxpayplus.sign }.to raise_error(RuntimeError, 'data is empty.')
       end
     end
 
-    it 'verifies request data correctly' do
-      auth_binding_no = 'auth_binding_no'
-      req_time = 'req_time'
-      data = auth_binding_no + req_time
-      signature = Pxpayplus.sign(auth_binding_no + req_time)
-      expect(Pxpayplus.verify(data, signature)).to eq(true)
+    describe 'verify' do
+      it 'verifies request data correctly' do
+        auth_binding_no = 'auth_binding_no'
+        req_time = 'req_time'
+        data = auth_binding_no + req_time
+        signature = Pxpayplus.sign(auth_binding_no + req_time)
+        expect(Pxpayplus.verify(data, signature)).to eq(true)
+      end
     end
   end
 end
