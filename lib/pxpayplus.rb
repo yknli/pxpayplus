@@ -44,7 +44,10 @@ module Pxpayplus
       signature.upcase!
     end
 
-    def verify(data, signature)
+    def verify(data, signature='')
+      raise 'signature value should be a string.' unless signature.is_a?(String)
+      raise 'signature is empty.' if signature.empty?
+
       signature.upcase == self.sign(data)
     end
   end
