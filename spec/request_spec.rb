@@ -36,6 +36,12 @@ RSpec.describe Pxpayplus::Request do
       end
     end
 
+    describe 'signature_params' do
+      it 'returns a hash of signature fields and values' do
+        expect(request.signature_params).to eq(params)
+      end
+    end
+
     describe 'signature' do
       subject(:signature) { request.signature }
       it 'signs signature by params' do
