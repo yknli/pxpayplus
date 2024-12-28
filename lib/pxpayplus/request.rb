@@ -1,3 +1,6 @@
+require 'rest-client'
+require 'json'
+
 module Pxpayplus
   class Request
 
@@ -27,6 +30,20 @@ module Pxpayplus
         'PX-MerCode': Pxpayplus.merchant_code,
         'PX-SignValue': signature
       }
+    end
+
+    def send_request
+      rest_client_params = {
+        method: method,
+        url: url,
+        payload: params,
+        headers: headers
+      }
+
+      rest_client_params.delete(:payload) if method == :get
+
+      response = RestClient::Request.execute(rest_client_params)
+      JSON.parse(response.body)
     end
   end
 end
