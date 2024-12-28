@@ -52,4 +52,21 @@ RSpec.describe Pxpayplus do
       expect { Pxpayplus.sign }.to raise_error(RuntimeError, 'data is empty.')
     end
   end
+
+  describe 'verify' do
+    before do
+      Pxpayplus.configure do |config|
+        config.secret_key = 'test_secret_key'
+        config.merchant_code = 'test_merchant_code'
+      end
+    end
+
+    it 'verifies request data correctly' do
+      auth_binding_no = 'auth_binding_no'
+      req_time = 'req_time'
+      data = auth_binding_no + req_time
+      signature = Pxpayplus.sign(auth_binding_no + req_time)
+      expect(Pxpayplus.verify(data, signature)).to eq(true)
+    end
+  end
 end
