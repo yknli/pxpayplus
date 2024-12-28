@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "pxpayplus/version"
-require_relative "pxpayplus/error"
+require_relative "pxpayplus/request"
 require "openssl"
 
 module Pxpayplus
