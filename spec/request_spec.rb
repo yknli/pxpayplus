@@ -48,5 +48,16 @@ RSpec.describe Pxpayplus::Request do
         expect(signature).to eq ('E458D99A038266FA090CEE7890EE48A2B6FB805F403449859CD7DA62D5415ECB')
       end
     end
+
+    describe 'headers' do
+      let(:signature) { request.signature }
+      it 'returns headers to send in api request' do
+        expect(request.headers).to eq ({
+          'Content-Type': 'application/json;charset=utf-8',
+          'PX-MerCode': 'test_merchant_code',
+          'PX-SignValue': signature,
+        })
+      end
+    end
   end
 end
