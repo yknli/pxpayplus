@@ -49,7 +49,7 @@ RSpec.describe Pxpayplus do
       end
 
       it 'raise an error if data value is not a string' do
-        expect { Pxpayplus.sign(123) }.to raise_error(RuntimeError, 'data for signing should be a string.')
+        expect { Pxpayplus.sign(123) }.to raise_error(RuntimeError, 'data value should be a string.')
       end
 
       it 'raise an error if data value is empty' do
