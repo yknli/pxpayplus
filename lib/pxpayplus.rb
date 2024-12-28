@@ -35,6 +35,9 @@ module Pxpayplus
     end
 
     def sign(data='')
+      raise 'data for signing should be a string.' unless data.is_a?(String)
+      raise 'data is empty.' if data.empty?
+
       digest = OpenSSL::Digest.new('sha256')
       key = [secret_key].pack('H*')
       signature = OpenSSL::HMAC.hexdigest(digest, key, data)
