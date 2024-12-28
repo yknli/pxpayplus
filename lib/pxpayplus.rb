@@ -43,5 +43,9 @@ module Pxpayplus
       signature = OpenSSL::HMAC.hexdigest(digest, key, data)
       signature.upcase!
     end
+
+    def verify(data, signature)
+      signature.upcase == self.sign(data)
+    end
   end
 end
