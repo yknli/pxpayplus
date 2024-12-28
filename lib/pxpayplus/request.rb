@@ -8,5 +8,9 @@ module Pxpayplus
         instance_variable_set("@#{key}", value)
       end
     end
+
+    def signature
+      @signature ||= Pxpayplus.sign(params.values.join)
+    end
   end
 end
