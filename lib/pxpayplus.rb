@@ -34,7 +34,7 @@ module Pxpayplus
       raise 'merchant_code not set.' if merchant_code.nil?
     end
 
-    def sign(data)
+    def sign(data='')
       digest = OpenSSL::Digest.new('sha256')
       key = [secret_key].pack('H*')
       signature = OpenSSL::HMAC.hexdigest(digest, key, data)
