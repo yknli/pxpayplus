@@ -2,6 +2,7 @@
 
 require_relative "pxpayplus/version"
 require_relative "pxpayplus/request"
+require_relative "pxpayplus/error"
 require "openssl"
 
 module Pxpayplus
