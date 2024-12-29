@@ -33,15 +33,6 @@ module Pxpayplus
     end
 
     def send_request
-      rest_client_params = {
-        method: method,
-        url: url,
-        payload: params,
-        headers: headers
-      }
-
-      rest_client_params.delete(:payload) if method == :get
-
       response = RestClient::Request.execute(rest_client_params)
       parsed_body = JSON.parse(response.body)
 
@@ -59,6 +50,23 @@ module Pxpayplus
 
     rescue RuntimeError => unknown_e
       raise unknown_e.message
+    end
+
+    private
+
+    def rest_client_params
+      rest_client_params = {
+        method: method,
+        url: url,
+        payload: params,
+        headers: headers
+      }
+
+      if method == :get
+        rest_client_params.delete(:payload)
+      end
+
+      rest_client_params
     end
   end
 end
