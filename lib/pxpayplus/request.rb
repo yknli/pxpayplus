@@ -46,13 +46,16 @@ module Pxpayplus
       parsed_body = JSON.parse(response.body)
 
       if parsed_body['status_code'] != '0000'
-        raise parsed_body['status_message']
+        raise Pxpayplus::Error.new(parsed_body['status_message'])
       end
 
       parsed_body
 
     rescue RestClient::ExceptionWithResponse => non_200_e
-      raise non_200_e.response.body
+      raise Pxpayplus::Error.new(non_200_e.response.body)
+
+    rescue RuntimeError => unknown_e
+      raise unknown_e.message
     end
   end
 end
