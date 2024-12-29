@@ -65,6 +65,25 @@ RSpec.describe Pxpayplus::Client do
         expect { client.create_auth_order(params) }.to raise_error(RuntimeError, 'secret_key not set.')
       end
 
+      context 'with configuration setup properly' do
+
+        before(:all) do
+          Pxpayplus.configure do |config|
+            config.secret_key = 'test_secret_key'
+            config.merchant_code = 'test_merchant_code'
+            config.api_hostname = 'example.com'
+          end
+        end
+
+        it 'sends request successfully' do
+          parsed_params = params.map { |k, v| [ k.to_s, v ] }.to_h
+          stub_request(request.method, request.url).
+            with(body: parsed_params).
+            to_return(body: '{"status_code": "0000"}', status: 200)
+
+          expect(client.create_auth_order(params)).to eq({ "status_code" => '0000'})
+        end
+      end
     end
   end
 
