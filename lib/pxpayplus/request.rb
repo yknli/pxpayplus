@@ -51,6 +51,9 @@ module Pxpayplus
 
       parsed_body
 
+    rescue RestClient::Exceptions::Timeout => timeout_e
+      raise 'Request Timed Out.'
+
     rescue RestClient::ExceptionWithResponse => non_200_e
       raise Pxpayplus::Error.new(non_200_e.response.body)
 
