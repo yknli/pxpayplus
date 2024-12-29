@@ -31,7 +31,7 @@ RSpec.describe Pxpayplus::Request do
     let(:request) { Pxpayplus::Request.new(params: params, method: method, url: url) }
 
     describe 'signature_fields' do
-      it 'returns waht fields to sign in params' do
+      it 'returns what fields to sign in params' do
         expect(request.signature_fields).to eq([:auth_binding_no, :req_time])
       end
     end
