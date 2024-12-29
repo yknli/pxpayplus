@@ -61,9 +61,24 @@ RSpec.describe Pxpayplus::Request do
     end
 
     describe 'send_request' do
-      it 'sends the request' do
+      it 'sends the request and gets successful response' do
         stub_request(:get, url).to_return(body: '{"status_code": "0000"}', status: 200)
         expect(request.send_request).to eq({ "status_code" => '0000'})
+      end
+
+      it 'raises error when gets status-200 error response' do
+        stub_request(:get, url).to_return(body: '{"status_code": "AD6000", "status_message": "Invalid Params."}', status: 200)
+        expect { request.send_request }.to raise_error(Pxpayplus::Error, 'Invalid Params.')
+      end
+
+      it 'raises error when gets non-status-200 error responses' do
+        stub_request(:get, url).to_return(body: 'Internal Server Error.', status: 500)
+        expect { request.send_request }.to raise_error(Pxpayplus::Error, 'Internal Server Error.')
+      end
+
+      it 'raises error when gets runtime errors' do
+        allow_any_instance_of(Pxpayplus::Request).to receive(:send_request).and_raise('Unknown Error.')
+        expect { request.send_request }.to raise_error('Unknown Error.')
       end
     end
   end
