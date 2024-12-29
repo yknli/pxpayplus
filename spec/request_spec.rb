@@ -11,25 +11,21 @@ RSpec.describe Pxpayplus::Request do
   end
 
   describe 'initialize' do
-    subject(:request) { Pxpayplus::Request.new(params: params, method: method, url: url) }
+    subject(:request) { Pxpayplus::Request.new(params: params, method: method) }
 
     let(:params) { { key: 'value' } }
     let(:method) { :post }
-    let(:url) { 'https://example.com' }
 
     it 'initializes with given options' do
       expect(request.params).to eq(params)
       expect(request.method).to eq(method)
-      expect(request.url).to eq(url)
     end
   end
 
   context 'when request initialized' do
     let(:params) { { auth_binding_no: 'auth_binding_no', req_time: 'req_time' } }
     let(:method) { :post }
-    let(:url) { 'https://example.com' }
-
-    let(:request) { Pxpayplus::Request.new(params: params, method: method, url: url) }
+    let(:request) { Pxpayplus::Request.new(params: params, method: method) }
 
     describe 'signature_fields' do
       it 'returns what fields to sign in params' do
@@ -61,13 +57,19 @@ RSpec.describe Pxpayplus::Request do
       end
     end
 
+    describe 'url' do
+      it 'returns api url' do
+        expect(request.url).to eq("https://#{Pxpayplus.api_hostname}")
+      end
+    end
+
     describe 'rest_client_params' do
       context 'when method is http get' do
         let(:method) { :get }
         it 'returns params wit no payload fields' do
           expect(request.send(:rest_client_params)).to eq({
             method: method,
-            url: url,
+            url: request.url,
             headers: request.headers,
           })
         end
@@ -77,7 +79,7 @@ RSpec.describe Pxpayplus::Request do
         it 'returns params with payload fields' do
           expect(request.send(:rest_client_params)).to eq({
             method: method,
-            url: url,
+            url: request.url,
             payload: { auth_binding_no: 'auth_binding_no', req_time: 'req_time' },
             headers: request.headers,
           })
@@ -87,17 +89,17 @@ RSpec.describe Pxpayplus::Request do
 
     describe 'send_request' do
       it 'sends the request and gets successful response' do
-        stub_request(:post, url).to_return(body: '{"status_code": "0000"}', status: 200)
+        stub_request(:post, request.url).to_return(body: '{"status_code": "0000"}', status: 200)
         expect(request.send_request).to eq({ "status_code" => '0000'})
       end
 
       it 'raises error when gets status-200 error response' do
-        stub_request(:post, url).to_return(body: '{"status_code": "AD6000", "status_message": "Invalid Params."}', status: 200)
+        stub_request(:post, request.url).to_return(body: '{"status_code": "AD6000", "status_message": "Invalid Params."}', status: 200)
         expect { request.send_request }.to raise_error(Pxpayplus::Error, 'Invalid Params.')
       end
 
       it 'raises error when gets non-status-200 error responses' do
-        stub_request(:post, url).to_return(body: 'Internal Server Error.', status: 500)
+        stub_request(:post, request.url).to_return(body: 'Internal Server Error.', status: 500)
         expect { request.send_request }.to raise_error(Pxpayplus::Error, 'Internal Server Error.')
       end
 
@@ -107,7 +109,7 @@ RSpec.describe Pxpayplus::Request do
       end
 
       it 'raises error when gets timeout error' do
-        stub_request(:post, url).to_timeout
+        stub_request(:post, request.url).to_timeout
         expect { request.send_request }.to raise_error('Request Timed Out.')
       end
     end
