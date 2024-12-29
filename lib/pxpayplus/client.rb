@@ -14,5 +14,12 @@ module Pxpayplus
       klass_name = klass_name.split('_').collect(&:capitalize).join
       "Pxpayplus::RequestDefinition::#{klass_name}"
     end
+
+    # Converts a string of a request class name to the actual class
+    # @param [String] request class name
+    # @return [Class] request class
+    def constantize_request_klass(klass_name)
+      Object.const_get(klass_name)
+    end
   end
 end
