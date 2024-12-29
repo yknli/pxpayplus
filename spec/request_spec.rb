@@ -13,7 +13,7 @@ RSpec.describe Pxpayplus::Request do
     subject(:request) { Pxpayplus::Request.new(params: params, method: method, url: url) }
 
     let(:params) { { key: 'value' } }
-    let(:method) { :get }
+    let(:method) { :post }
     let(:url) { 'https://example.com' }
 
     it 'initializes with given options' do
@@ -25,7 +25,7 @@ RSpec.describe Pxpayplus::Request do
 
   context 'when request initialized' do
     let(:params) { { auth_binding_no: 'auth_binding_no', req_time: 'req_time' } }
-    let(:method) { :get }
+    let(:method) { :post }
     let(:url) { 'https://example.com' }
 
     let(:request) { Pxpayplus::Request.new(params: params, method: method, url: url) }
@@ -62,17 +62,17 @@ RSpec.describe Pxpayplus::Request do
 
     describe 'send_request' do
       it 'sends the request and gets successful response' do
-        stub_request(:get, url).to_return(body: '{"status_code": "0000"}', status: 200)
+        stub_request(:post, url).to_return(body: '{"status_code": "0000"}', status: 200)
         expect(request.send_request).to eq({ "status_code" => '0000'})
       end
 
       it 'raises error when gets status-200 error response' do
-        stub_request(:get, url).to_return(body: '{"status_code": "AD6000", "status_message": "Invalid Params."}', status: 200)
+        stub_request(:post, url).to_return(body: '{"status_code": "AD6000", "status_message": "Invalid Params."}', status: 200)
         expect { request.send_request }.to raise_error(Pxpayplus::Error, 'Invalid Params.')
       end
 
       it 'raises error when gets non-status-200 error responses' do
-        stub_request(:get, url).to_return(body: 'Internal Server Error.', status: 500)
+        stub_request(:post, url).to_return(body: 'Internal Server Error.', status: 500)
         expect { request.send_request }.to raise_error(Pxpayplus::Error, 'Internal Server Error.')
       end
 
@@ -82,7 +82,7 @@ RSpec.describe Pxpayplus::Request do
       end
 
       it 'raises error when gets timeout error' do
-        stub_request(:get, url).to_timeout
+        stub_request(:post, url).to_timeout
         expect { request.send_request }.to raise_error('Request Timed Out.')
       end
     end
