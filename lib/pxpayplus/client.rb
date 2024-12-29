@@ -21,5 +21,21 @@ module Pxpayplus
     def constantize_request_klass(klass_name)
       Object.const_get(klass_name)
     end
+
+    # Sends api request by calling given api action
+    def method_missing(method, *args)
+      if actions.include?(method)
+        klass_name = action_to_request_klass_name(method)
+        klass = constantize_request_klass(klass_name)
+
+        params = {}
+        params = args[0] if args.length > 0
+
+        req = klass.new(params: params)
+        req.send_request
+      else
+        super
+      end
+    end
   end
 end
