@@ -60,6 +60,30 @@ RSpec.describe Pxpayplus::Request do
       end
     end
 
+    describe 'rest_client_params' do
+      context 'when method is http get' do
+        let(:method) { :get }
+        it 'returns params wit no payload fields' do
+          expect(request.send(:rest_client_params)).to eq({
+            method: method,
+            url: url,
+            headers: request.headers,
+          })
+        end
+      end
+
+      context 'when method is not http get' do
+        it 'returns params with payload fields' do
+          expect(request.send(:rest_client_params)).to eq({
+            method: method,
+            url: url,
+            payload: { auth_binding_no: 'auth_binding_no', req_time: 'req_time' },
+            headers: request.headers,
+          })
+        end
+      end
+    end
+
     describe 'send_request' do
       it 'sends the request and gets successful response' do
         stub_request(:post, url).to_return(body: '{"status_code": "0000"}', status: 200)
