@@ -43,6 +43,8 @@ module Pxpayplus
       raise 'api_hostname not set.' if api_hostname.nil?
     end
 
+    # Signs the given data with the secret key
+    # @return [String] the signature
     def sign(data='')
       raise 'data value should be a string.' unless data.is_a?(String)
       raise 'data is empty.' if data.empty?
@@ -53,6 +55,8 @@ module Pxpayplus
       signature.upcase!
     end
 
+    # Verifies the given data with the signature
+    # @return [Boolean] true if the signature is valid, false otherwise
     def verify(data, signature='')
       raise 'signature value should be a string.' unless signature.is_a?(String)
       raise 'signature is empty.' if signature.empty?
