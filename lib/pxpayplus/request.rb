@@ -43,7 +43,16 @@ module Pxpayplus
       rest_client_params.delete(:payload) if method == :get
 
       response = RestClient::Request.execute(rest_client_params)
-      JSON.parse(response.body)
+      parsed_body = JSON.parse(response.body)
+
+      if parsed_body['status_code'] != '0000'
+        raise parsed_body['status_message']
+      end
+
+      parsed_body
+
+    rescue RestClient::ExceptionWithResponse => non_200_e
+      raise non_200_e.response.body
     end
   end
 end
