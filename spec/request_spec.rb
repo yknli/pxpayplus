@@ -59,5 +59,12 @@ RSpec.describe Pxpayplus::Request do
         })
       end
     end
+
+    describe 'send_request' do
+      it 'sends the request' do
+        stub_request(:get, url).to_return(body: '{"status_code": "0000"}', status: 200)
+        expect(request.send_request).to eq({ "status_code" => '0000'})
+      end
+    end
   end
 end
