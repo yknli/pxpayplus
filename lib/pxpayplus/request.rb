@@ -4,7 +4,7 @@ require 'json'
 module Pxpayplus
   class Request
 
-    attr_accessor :params, :method, :url, :headers
+    attr_accessor :params, :method, :headers
 
     def initialize(options = {})
       options.each do |key, value|
@@ -30,6 +30,10 @@ module Pxpayplus
         'PX-MerCode': Pxpayplus.merchant_code,
         'PX-SignValue': signature
       }
+    end
+
+    def url
+      "https://#{Pxpayplus.api_hostname}"
     end
 
     def send_request
