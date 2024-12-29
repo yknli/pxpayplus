@@ -39,14 +39,14 @@ module Pxpayplus
 
       yield(self)
 
-      raise 'secret_key not set.' if secret_key.nil?
-      raise 'merchant_code not set.' if merchant_code.nil?
-      raise 'api_hostname not set.' if api_hostname.nil?
+      validate_configuration
     end
 
     # Signs the given data with the secret key
     # @return [String] the signature
     def sign(data='')
+      validate_configuration
+
       raise 'data value should be a string.' unless data.is_a?(String)
       raise 'data is empty.' if data.empty?
 
@@ -63,6 +63,14 @@ module Pxpayplus
       raise 'signature is empty.' if signature.empty?
 
       signature.upcase == self.sign(data)
+    end
+
+    private
+
+    def validate_configuration
+      raise 'secret_key not set.' if secret_key.nil?
+      raise 'merchant_code not set.' if merchant_code.nil?
+      raise 'api_hostname not set.' if api_hostname.nil?
     end
   end
 end
