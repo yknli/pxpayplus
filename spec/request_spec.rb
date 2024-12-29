@@ -80,6 +80,11 @@ RSpec.describe Pxpayplus::Request do
         allow_any_instance_of(Pxpayplus::Request).to receive(:send_request).and_raise('Unknown Error.')
         expect { request.send_request }.to raise_error('Unknown Error.')
       end
+
+      it 'raises error when gets timeout error' do
+        stub_request(:get, url).to_timeout
+        expect { request.send_request }.to raise_error('Request Timed Out.')
+      end
     end
   end
 end
