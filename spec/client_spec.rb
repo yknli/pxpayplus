@@ -54,4 +54,18 @@ RSpec.describe Pxpayplus::Client do
     end
   end
 
+  describe 'method_missing' do
+    let(:params) { { mer_order_no: 'test_mer_order_no', amount: 0, device_type: 1, req_time: 'test_req_time' } }
+
+    context 'with initialized request' do
+
+      let(:request) { Pxpayplus::RequestDefinition::CreateAuthOrderRequest.new }
+
+      it 'raises error when configuration not setup properly' do
+        expect { client.create_auth_order(params) }.to raise_error(RuntimeError, 'secret_key not set.')
+      end
+
+    end
+  end
+
 end
