@@ -10,10 +10,12 @@ RSpec.describe Pxpayplus do
       Pxpayplus.configure do |config|
         config.secret_key = 'key'
         config.merchant_code = 'code'
+        config.api_hostname = 'example.com'
       end
 
       expect(Pxpayplus.secret_key).to eq('key')
       expect(Pxpayplus.merchant_code).to eq('code')
+      expect(Pxpayplus.api_hostname).to eq('example.com')
     end
 
     it 'raise an error if no configuration is given' do
@@ -27,6 +29,15 @@ RSpec.describe Pxpayplus do
     it 'raise an error if merchant_code not set' do
       expect { Pxpayplus.configure{ |config| config.secret_key = 'key' } }.to raise_error(RuntimeError, 'merchant_code not set.')
     end
+
+    it 'raise an error if api_hostname not set' do
+      expect do
+        Pxpayplus.configure do |config|
+          config.secret_key = 'key'
+          config.merchant_code = 'code'
+        end
+      end.to raise_error(RuntimeError, 'api_hostname not set.')
+    end
   end
 
   context 'when credentials configured' do
@@ -35,6 +46,7 @@ RSpec.describe Pxpayplus do
       Pxpayplus.configure do |config|
         config.secret_key = 'test_secret_key'
         config.merchant_code = 'test_merchant_code'
+        config.api_hostname = 'example.com'
       end
     end
 

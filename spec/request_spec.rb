@@ -6,6 +6,7 @@ RSpec.describe Pxpayplus::Request do
     Pxpayplus.configure do |config|
       config.secret_key = 'test_secret_key'
       config.merchant_code = 'test_merchant_code'
+      config.api_hostname = 'example.com'
     end
   end
 
