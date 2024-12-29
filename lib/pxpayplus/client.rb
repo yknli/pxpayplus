@@ -7,7 +7,7 @@ module Pxpayplus
     private
 
     # Converts a symbol of action name to request class name
-    # @param [Object] api action name
+    # @param [String] api action name
     # @return [String] request class name
     def action_to_request_klass_name(action)
       klass_name = "#{action.to_s}_request"
