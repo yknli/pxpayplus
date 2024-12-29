@@ -16,16 +16,22 @@ module Pxpayplus
     # @return [String]
     attr_accessor :merchant_code
 
+    # Gets or sets the pxpaypplus api hostname
+    # @return [String]
+    attr_accessor :api_hostname
+
     # Configure pxpayplus credentials
     #
     # @example Setup secret key and merchant code
     #   Pxpayplus.configure do |config|
     #     config.secret_key = 'key'
     #     config.merchant_code = 'code'
+    #     config.api_hostname = 'example.com'
     #   end
     def configure
       @secret_key = nil
       @merchant_code = nil
+      @api_hostname = nil
 
       raise 'Please use configure method to setup your pxpayplus credentials.' unless block_given?
 
@@ -33,6 +39,7 @@ module Pxpayplus
 
       raise 'secret_key not set.' if secret_key.nil?
       raise 'merchant_code not set.' if merchant_code.nil?
+      raise 'api_hostname not set.' if api_hostname.nil?
     end
 
     def sign(data='')
