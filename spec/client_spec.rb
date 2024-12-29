@@ -32,4 +32,26 @@ RSpec.describe Pxpayplus::Client do
     end
   end
 
+  describe 'constantize' do
+    it 'returns request class by given request class name' do
+      klass = client.send(:constantize_request_klass, 'Pxpayplus::RequestDefinition::CreateAuthOrderRequest')
+      expect(klass).to eq(Pxpayplus::RequestDefinition::CreateAuthOrderRequest)
+
+      klass = client.send(:constantize_request_klass, 'Pxpayplus::RequestDefinition::DebitRequest')
+      expect(klass).to eq(Pxpayplus::RequestDefinition::DebitRequest)
+
+      klass = client.send(:constantize_request_klass, 'Pxpayplus::RequestDefinition::UnbindRequest')
+      expect(klass).to eq(Pxpayplus::RequestDefinition::UnbindRequest)
+
+      klass = client.send(:constantize_request_klass, 'Pxpayplus::RequestDefinition::RefundRequest')
+      expect(klass).to eq(Pxpayplus::RequestDefinition::RefundRequest)
+
+      klass = client.send(:constantize_request_klass, 'Pxpayplus::RequestDefinition::CheckOrderStatusRequest')
+      expect(klass).to eq(Pxpayplus::RequestDefinition::CheckOrderStatusRequest)
+
+      klass = client.send(:constantize_request_klass, 'Pxpayplus::RequestDefinition::UpdateDebitTimeRequest')
+      expect(klass).to eq(Pxpayplus::RequestDefinition::UpdateDebitTimeRequest)
+    end
+  end
+
 end
