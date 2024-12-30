@@ -81,16 +81,88 @@ RSpec.describe Pxpayplus::Client do
           end
         end
 
-        let(:params) { { mer_order_no: 'test_mer_order_no', amount: 0, device_type: 1, req_time: 'test_req_time' } }
-        let(:request) { Pxpayplus::RequestDefinition::CreateAuthOrderRequest.new }
-        it 'sends request successfully' do
-          parsed_params = params.map { |k, v| [ k.to_s, v ] }.to_h
-          stub_request(request.method, request.url).
-            with(body: parsed_params).
-            to_return(body: '{"status_code": "0000"}', status: 200)
+        describe 'create_auth_order' do
+          let(:params) { { mer_order_no: 'test_mer_order_no', amount: 0, device_type: 1, req_time: 'test_req_time' } }
+          let(:request) { Pxpayplus::RequestDefinition::CreateAuthOrderRequest.new }
 
-          expect(client.create_auth_order(params)).to eq({ "status_code" => '0000'})
+          it 'sends create_auth_order request correctly' do
+            parsed_params = params.map { |k, v| [ k.to_s, v ] }.to_h
+            stub_request(request.method, request.url).
+              with(body: parsed_params).
+              to_return(body: '{"status_code": "0000"}', status: 200)
+
+            expect(client.create_auth_order(params)).to eq({ "status_code" => '0000'})
+          end
         end
+
+        describe 'debit' do
+          let(:params) { { mer_trade_no: 'test_mer_trade_no', auth_binding_no: 'test_auth_binding_no', mer_order_no: 'test_mer_order_no', amount: 0, req_time: 'test_req_time' } }
+          let(:request) { Pxpayplus::RequestDefinition::DebitRequest.new }
+
+          it 'sends debit request correctly' do
+            parsed_params = params.map { |k, v| [ k.to_s, v ] }.to_h
+            stub_request(request.method, request.url).
+              with(body: parsed_params).
+              to_return(body: '{"status_code": "0000"}', status: 200)
+
+            expect(client.debit(params)).to eq({ "status_code" => '0000'})
+          end
+        end
+
+        describe 'unbind' do
+          let(:params) { { mer_order_no: 'test_mer_order_no', auth_binding_no: 'test_auth_binding_no', mer_member_token: 'test_mer_member_token', req_time: 'test_req_time' } }
+          let(:request) { Pxpayplus::RequestDefinition::UnbindRequest.new }
+
+          it 'sends unbind request correctly' do
+            parsed_params = params.map { |k, v| [ k.to_s, v ] }.to_h
+            stub_request(request.method, request.url).
+              with(body: parsed_params).
+              to_return(body: '{"status_code": "0000"}', status: 200)
+
+            expect(client.unbind(params)).to eq({ "status_code" => '0000'})
+          end
+        end
+
+        describe 'refund' do
+          let(:params) { { mer_trade_no: 'test_mer_trade_no', px_trade_no: 'test_px_trade_no', refund_mer_trade_no: 'test_refund_mer_trade_no', amount: 0, req_time: 'test_req_time' } }
+          let(:request) { Pxpayplus::RequestDefinition::RefundRequest.new }
+
+          it 'sends refund request correctly' do
+            parsed_params = params.map { |k, v| [ k.to_s, v ] }.to_h
+            stub_request(request.method, request.url).
+              with(body: parsed_params).
+              to_return(body: '{"status_code": "0000"}', status: 200)
+
+            expect(client.refund(params)).to eq({ "status_code" => '0000'})
+          end
+        end
+
+        describe 'check_order_status' do
+          let(:params) { { mer_trade_no: 'test_mer_trade_no', req_time: 'test_req_time' } }
+          let(:request) { Pxpayplus::RequestDefinition::CheckOrderStatusRequest.new(params: params) }
+
+          it 'sends check_order_status request correctly' do
+            stub_request(request.method, request.url).
+              to_return(body: '{"status_code": "0000"}', status: 200)
+
+            expect(client.check_order_status(params)).to eq({ "status_code" => '0000'})
+          end
+        end
+
+        describe 'update_debit_time' do
+          let(:params) { { mer_trade_no: 'test_mer_trade_no', px_trade_no: 'test_px_trade_no', req_time: 'test_req_time' } }
+          let(:request) { Pxpayplus::RequestDefinition::UpdateDebitTimeRequest.new }
+
+          it 'sends update_debit_time request correctly' do
+            parsed_params = params.map { |k, v| [ k.to_s, v ] }.to_h
+            stub_request(request.method, request.url).
+              with(body: parsed_params).
+              to_return(body: '{"status_code": "0000"}', status: 200)
+
+            expect(client.update_debit_time(params)).to eq({ "status_code" => '0000'})
+          end
+        end
+
       end
     end
   end
