@@ -4,7 +4,7 @@ require 'json'
 module Pxpayplus
   class Request
 
-    attr_accessor :params, :method
+    attr_accessor :params, :method, :url
 
     attr_reader :headers
 
@@ -44,12 +44,6 @@ module Pxpayplus
         'PX-MerCode': Pxpayplus.merchant_code,
         'PX-SignValue': signature
       }
-    end
-
-    # Returns api url (should be overrided in subclasses)
-    # @return [String]
-    def url
-      "https://#{Pxpayplus.api_hostname}"
     end
 
     # Sends the api request
