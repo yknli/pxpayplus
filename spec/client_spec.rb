@@ -55,18 +55,24 @@ RSpec.describe Pxpayplus::Client do
   end
 
   describe 'method_missing' do
-    let(:params) { { mer_order_no: 'test_mer_order_no', amount: 0, device_type: 1, req_time: 'test_req_time' } }
+    context 'with unknown action' do
+      it 'raises NoMethodError' do
+        expect { client.unknown_action }.to raise_error(NoMethodError)
+      end
+    end
 
-    context 'with initialized request' do
+    context 'with known action' do
+      let(:action) { :create_auth_order }
 
-      let(:request) { Pxpayplus::RequestDefinition::CreateAuthOrderRequest.new }
+      context 'when configuration not setup properly' do
+        let(:params) { { mer_order_no: 'test_mer_order_no', amount: 0, device_type: 1, req_time: 'test_req_time' } }
 
-      it 'raises error when configuration not setup properly' do
-        expect { client.create_auth_order(params) }.to raise_error(RuntimeError, 'secret_key not set.')
+        it 'raises configuration setup error' do
+          expect { client.send(action, params) }.to raise_error(RuntimeError, 'secret_key not set.')
+        end
       end
 
-      context 'with configuration setup properly' do
-
+      context 'when configuration setup properly' do
         before(:all) do
           Pxpayplus.configure do |config|
             config.secret_key = 'test_secret_key'
@@ -75,6 +81,8 @@ RSpec.describe Pxpayplus::Client do
           end
         end
 
+        let(:params) { { mer_order_no: 'test_mer_order_no', amount: 0, device_type: 1, req_time: 'test_req_time' } }
+        let(:request) { Pxpayplus::RequestDefinition::CreateAuthOrderRequest.new }
         it 'sends request successfully' do
           parsed_params = params.map { |k, v| [ k.to_s, v ] }.to_h
           stub_request(request.method, request.url).
