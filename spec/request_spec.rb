@@ -11,10 +11,11 @@ RSpec.describe Pxpayplus::Request do
   end
 
   describe 'initialize' do
-    subject(:request) { Pxpayplus::Request.new(params: params, method: method) }
+    subject(:request) { Pxpayplus::Request.new(params: params, method: method, url: url) }
 
     let(:params) { { key: 'value' } }
     let(:method) { :post }
+    let(:url) { "https://#{Pxpayplus.api_hostname}" }
 
     it 'initializes with given options' do
       expect(request.params).to eq(params)
@@ -25,7 +26,8 @@ RSpec.describe Pxpayplus::Request do
   context 'when request initialized' do
     let(:params) { { auth_binding_no: 'auth_binding_no', req_time: 'req_time' } }
     let(:method) { :post }
-    let(:request) { Pxpayplus::Request.new(params: params, method: method) }
+    let(:url) { "https://#{Pxpayplus.api_hostname}" }
+    let(:request) { Pxpayplus::Request.new(params: params, method: method, url: url) }
 
     describe 'signature_fields' do
       it 'returns what fields to sign in params' do
@@ -54,12 +56,6 @@ RSpec.describe Pxpayplus::Request do
           'PX-MerCode': 'test_merchant_code',
           'PX-SignValue': signature,
         })
-      end
-    end
-
-    describe 'url' do
-      it 'returns api url' do
-        expect(request.url).to eq("https://#{Pxpayplus.api_hostname}")
       end
     end
 
